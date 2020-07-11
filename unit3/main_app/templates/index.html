@@ -1,0 +1,68 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Wacky Widgets</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+</head>
+
+<body>
+    <h1>Wacky Widgets</h1>
+
+    {% if widgets|length == 0 %}
+
+    <h3> No Widgets Exist </h3>
+
+    <hr> {% else %}
+
+    <table class="pure-table pure-table-striped">
+        <thead>
+            <th> Description</th>
+            <th> Quanitity</th>
+            <th> Delete </th>
+        </thead>
+        <tbody>
+            {% for x in widgets%}
+
+            <tr>
+                <td>
+                    {{ x.description}}
+                </td>
+                <td>
+                    {{ x.quantity}}
+                </td>
+                <td>
+                    <form action="{% url 'widgets_delete' x.id %}" method="POST">{% csrf_token %}
+
+                        <a href='#' onclick='this.parentNode.submit(); return false;'>X</a>
+                    </form>
+                </td>
+            </tr>
+            {% endfor%}
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Total Quanitity</td>
+                <td>{{total}}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    <hr> {% endif %}
+    <form action="{% url 'add_widget' %}" method="post">
+        {% csrf_token %}
+        <table>
+            {{ widgets_form.as_table }}
+        </table>
+        <input type="submit" value="ADD WIDGET" class="pure-button">
+    </form>
+</body>
+
+</html>
